@@ -43,10 +43,26 @@ console.log(deparse(stmts));
 // SELECT * FROM "another_table"
 ```
 
+## Normalize Example
+
+The deparser can be used separately, which removes many deps required for the parser:
+
+```js
+const { parse } = require('pgsql-parser');
+const { deparse } = require('pgsql-deparser');
+
+const stmts = parse("SELECT * FROM test_table left join c on a = 'xcx' and d =121 where id='2' and y in (1) and c > 'asdasdsadas' and a between 'a' and 'd'"
+);
+
+console.log(deparse(stmts,{normalize:true}));
+
+// SELECT * FROM test_table LEFT OUTER JOIN c ON a = ? AND d = ? WHERE id = ? AND y IN (?) AND c > ? AND a BETWEEN ? AND ?
+```
+
 ## CLI
 
 ```
-npm install -g pgsql-parser
+npm install -g pgsql-parser 
 ```
 
 ### usage

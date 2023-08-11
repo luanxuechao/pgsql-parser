@@ -168,6 +168,7 @@ export default class Deparser {
     if (opts.hasOwnProperty('tab')) {
       TAB_CHAR = opts.tab;
     }
+    this.normalize = opts.normalize
     if (!Array.isArray(this.tree)) this.tree = [this.tree];
   }
 
@@ -618,6 +619,9 @@ export default class Deparser {
   }
 
   ['A_Const'](node, context = {}) {
+    if(node.val.String && this.normalize){
+      return '?'
+    }
     if (node.val.String) {
       return this.escape(this.deparse(node.val, context));
     }
@@ -1611,6 +1615,9 @@ export default class Deparser {
   }
 
   ['Integer'](node, context = {}) {
+    if(this.normalize){
+      return '?'
+    }
     if (node.ival < 0 && context !== 'simple') {
       return `(${node.ival})`;
     }
